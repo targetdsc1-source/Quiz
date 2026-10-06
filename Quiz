@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammar Quiz: Active/Passive Voice & Direct/Indirect Speech</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+    }
+    .quiz-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+        text-align: center;
+        color: #2c3e50;
+    }
+    .question-block {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .question-text {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .options label {
+        display: block;
+        margin-bottom: 8px;
+        cursor: pointer;
+    }
+    .btn-submit {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: #3498db;
+        color: white;
+        border: none;
+        font-size: 18px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    .btn-submit:hover {
+        background: #2980b9;
+    }
+    #result {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Comprehensive Grammar Quiz</h1>
+    <p style="text-align:center;">Test your knowledge of Active/Passive Voice and Direct/Indirect Speech.</p>
+    
+    <form id="quizForm">
+        <div id="quiz-questions"></div>
+        <button type="button" class="btn-submit" onclick="calculateScore()">Submit Quiz</button>
+    </form>
+    
+    <div id="result"></div>
+</div>
+
+<script>
+const quizData = [
+    // PART 1: ACTIVE AND PASSIVE VOICE (40 Questions)
+    {
+        q: "Change to Passive: Children love toys.[span_0](start_span)[span_0](end_span)",
+        options: [
+            "Toys love children.",
+            "Toys are loved by children.",
+            "Toys were loved by children.",
+            "Children are loved by toys."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Do girls buy clothes?[span_1](start_span)[span_1](end_span)",
+        options: [
+            "Are clothes bought by girls?",
+            "Do clothes bought by girls?",
+            "Were clothes bought by girls?",
+            "Are clothes being bought by girls?"
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: The boys are plucking the fruits.[span_2](start_span)[span_2](end_span)",
+        options: [
+            "The fruits are plucked by the boys.",
+            "Fruits are being plucked by the boys.",
+            "Fruits were being plucked by the boys.",
+            "The fruits have been plucked by the boys."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Is the farmer ploughing the field?[span_3](start_span)[span_3](end_span)",
+        options: [
+            "Is the field ploughed by the farmer?",
+            "Was the field being ploughed by the farmer?",
+            "Is the field being ploughed by the farmer?",
+            "Has the field been ploughed by the farmer?"
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: The girls have eaten all the pastries.[span_4](start_span)[span_4](end_span)",
+        options: [
+            "All the pastries are eaten by the girls.",
+            "All the pastries were eaten by the girls.",
+            "All the pastries have been eaten by the girls.",
+            "All the pastries had been eaten by the girls."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Has Seeta written this letter?[span_5](start_span)[span_5](end_span)",
+        options: [
+            "Has this letter been written by Seeta?",
+            "Have this letter written by Seeta?",
+            "Was this letter written by Seeta?",
+            "Is this letter written by Seeta?"
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: The mad dog bit the boy.[span_6](start_span)[span_6](end_span)",
+        options: [
+            "The boy is bitten by the mad dog.",
+            "The boy was bit by the mad dog.",
+            "The boy was bitten by the mad dog.",
+            "The boy had been bitten by the mad dog."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Did Ram tell the truth?[span_7](start_span)[span_7](end_span)",
+        options: [
+            "Is the truth told by Ram?",
+            "Was the truth told by Ram?",
+            "Has the truth been told by Ram?",
+            "Did the truth told by Ram?"
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Our brave Jawans were defending our country.[span_8](start_span)[span_8](end_span)",
+        options: [
+            "Our country was defended by our brave Jawans.",
+            "Our country is being defended by our brave Jawans.",
+            "Our country was being defended by our brave Jawans.",
+            "Our country had been defended by our brave Jawans."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Was Meena arranging the flowers?[span_9](start_span)[span_9](end_span)",
+        options: [
+            "Were the flowers arranged by Meena?",
+            "Were the flowers being arranged by Meena?",
+            "Was the flowers being arranged by Meena?",
+            "Have the flowers been arranged by Meena?"
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: The boys had eaten all the cakes before the guests arrived.[span_10](start_span)[span_10](end_span)",
+        options: [
+            "All the cakes were eaten by the boys before the guests arrived.",
+            "All the cakes are eaten by the boys before the guests arrived.",
+            "All the cakes had been eaten by the boys before the guests arrived.",
+            "All the cakes have been eaten by the boys before the guests arrived."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Prateek will never hurt you.[span_11](start_span)[span_11](end_span)",
+        options: [
+            "You are never hurt by Prateek.",
+            "You will never be hurt by Prateek.",
+            "You would never be hurt by Prateek.",
+            "You will never been hurt by Prateek."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Shall we help her?[span_12](start_span)[span_12](end_span)",
+        options: [
+            "Will she be helped by us?",
+            "Shall she be helped by us?",
+            "Is she helped by us?",
+            "Would she be helped by us?"
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: The train will have left the station by 10 o'clock.[span_13](start_span)[span_13](end_span)",
+        options: [
+            "The station will be left by the train by 10 o'clock.",
+            "The station would have been left by the train by 10 o'clock.",
+            "The station will have been left by the train by 10 o'clock.",
+            "The station will have left by the train by 10 o'clock."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Does the grocer sell butter?[span_14](start_span)[span_14](end_span)",
+        options: [
+            "Is butter sold by the grocer?",
+            "Was butter sold by the grocer?",
+            "Does butter sold by the grocer?",
+            "Has butter been sold by the grocer?"
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: Has anyone watered the plants?[span_15](start_span)[span_15](end_span)",
+        options: [
+            "Have the plants watered by anyone?",
+            "Has the plants been watered by anyone?",
+            "Have the plants been watered by anyone?",
+            "Are the plants watered by anyone?"
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Who did this mischief?[span_16](start_span)[span_16](end_span)",
+        options: [
+            "Who was this mischief done by?",
+            "By whom is this mischief done?",
+            "By whom was this mischief done?",
+            "By whom this mischief was done?"
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: She is listening to her teachers.[span_17](start_span)[span_17](end_span)",
+        options: [
+            "Her teachers are listened to by her.",
+            "Her teachers are being listened to by her.",
+            "Her teachers were being listened to by her.",
+            "Her teachers have been listened to by her."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: The intelligent students laugh at the slow learners.[span_18](start_span)[span_18](end_span)",
+        options: [
+            "The slow learners are laughed at by the intelligent students.",
+            "The slow learners are being laughed at by the intelligent students.",
+            "The slow learners were laughed at by the intelligent students.",
+            "The slow learners have laughed at by the intelligent students."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: We made him confess the guilt.[span_19](start_span)[span_19](end_span)",
+        options: [
+            "He is made to confess the guilt.",
+            "He was made to confess the guilt.",
+            "He had been made to confess the guilt.",
+            "He was made confess the guilt."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Please send us the parcel as early as possible.[span_20](start_span)[span_20](end_span)",
+        options: [
+            "Let the parcel be sent to us as early as possible.",
+            "You are requested to send the parcel as early as possible.",
+            "The parcel may kindly be sent to us as early as possible.",
+            "All of the above are acceptable forms."
+        ],
+        ans: 3 // Note: Using one standard accepted form based on the text. Let's adjust to strictly match text.
+    },
+    {
+        q: "Change to Passive: Bring a chair.[span_21](start_span)[span_21](end_span)",
+        options: [
+            "A chair is brought.",
+            "Let a chair be brought.",
+            "A chair should be brought.",
+            "Let bring a chair."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Do this quickly.[span_22](start_span)[span_22](end_span)",
+        options: [
+            "Let this be done quickly.",
+            "This is done quickly.",
+            "This should be done quickly.",
+            "Let do this quickly."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: Do not touch the equipment.[span_23](start_span)[span_23](end_span)",
+        options: [
+            "Let not the equipment be touched.",
+            "Let the equipment not be touched.",
+            "Both A and B are correct.",
+            "The equipment should not touch."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Eat nutritious food.[span_24](start_span)[span_24](end_span)",
+        options: [
+            "Nutritious food is eaten.",
+            "Let nutritious food be eaten.",
+            "Nutritious food should be eaten.",
+            "Nutritious food must eat."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: They gave him a story book.[span_25](start_span)[span_25](end_span)",
+        options: [
+            "He was given a story book by them.",
+            "A story book was given to him by them.",
+            "Both A and B are correct.",
+            "He is given a story book by them."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: He dreams a dream.[span_26](start_span)[span_26](end_span)",
+        options: [
+            "A dream is dreamt by him.",
+            "A dream was dreamt by him.",
+            "A dream has been dreamt by him.",
+            "A dream is being dreamt by him."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: Who gave you permission to enter?[span_27](start_span)[span_27](end_span)",
+        options: [
+            "By whom were you given permission to enter?",
+            "By whom given you permission to enter?",
+            "By whom you were given permission to enter?",
+            "By whom was you given permission to enter?"
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: They will demolish the entire block.[span_28](start_span)[span_28](end_span)",
+        options: [
+            "The entire block is being demolished.",
+            "The block may be demolished entirely.",
+            "The entire block will be demolished.",
+            "The entire block will have to be demolished by them."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Your beauty impressed everybody.[span_29](start_span)[span_29](end_span)",
+        options: [
+            "Everybody was impressed to your beauty.",
+            "Everybody was impressed of your beauty.",
+            "Everybody was impressed with your beauty.",
+            "Everybody was impressed at your beauty."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: This book contains hundred pages.[span_30](start_span)[span_30](end_span)",
+        options: [
+            "Hundred pages are contained by this book.",
+            "Hundred pages are contained in this book.",
+            "Hundred pages were contained in this book.",
+            "Hundred pages were contained at this book."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Let him bring some chocolates.[span_31](start_span)[span_31](end_span)",
+        options: [
+            "Some chocolates should be brought by you.",
+            "Let some chocolates be brought by him.",
+            "You are requested to bring some chocolates.",
+            "None of these."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Whom does he look for?[span_32](start_span)[span_32](end_span)",
+        options: [
+            "He is looked after for whom?",
+            "Who is looked after for him?",
+            "Who is looked for by him?",
+            "He is looked after by whom?"
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: I saw him leaving the house.[span_33](start_span)[span_33](end_span)",
+        options: [
+            "He had been seen leaving the house.",
+            "He was seen to be leaving the house.",
+            "Leaving the house he was seen by me.",
+            "He was seen leaving the house by me."
+        ],
+        ans: 3
+    },
+    {
+        q: "Change to Passive: Julia rescued three cats.[span_34](start_span)[span_34](end_span)",
+        options: [
+            "Three cats are rescued by Julia.",
+            "Three cats were rescued by Julia.",
+            "Three cats have been rescued by Julia.",
+            "Three cats had been rescued by Julia."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: Alex learned the poem.[span_35](start_span)[span_35](end_span)",
+        options: [
+            "The poem is learned by Alex.",
+            "The poem was learned by Alex.",
+            "The poem has been learned by Alex.",
+            "The poem had been learned by Alex."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Passive: They play handball.[span_36](start_span)[span_36](end_span)",
+        options: [
+            "Handball is played by them.",
+            "Handball was played by them.",
+            "Handball has been played by them.",
+            "Handball is being played by them."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Passive: The girls had lost the match.[span_37](start_span)[span_37](end_span)",
+        options: [
+            "The match was lost by the girls.",
+            "The match has been lost by the girls.",
+            "The match had been lost by the girls.",
+            "The match is lost by the girls."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: She gives him a box.[span_38](start_span)[span_38](end_span)",
+        options: [
+            "He is given a box by her.",
+            "A box is given to him by her.",
+            "Both A and B are correct.",
+            "He was given a box by her."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Passive: Michael has not sent me a text message.[span_39](start_span)[span_39](end_span)",
+        options: [
+            "A text message was not sent to me by Michael.",
+            "I have not been sent a text message by Michael.",
+            "I had not been sent a text message by Michael.",
+            "I am not sent a text message by Michael."
+        ],
+        ans: 1
+    },
+
+    // PART 2: DIRECT AND INDIRECT SPEECH (40 Questions)
+    {
+        q: "Change to Indirect: The girl said, \"I am very sorry.\[span_40](start_span)"[span_40](end_span)",
+        options: [
+            "The girl said that she is very sorry.",
+            "The girl said that she was very sorry.",
+            "The girl said that I am very sorry.",
+            "The girl said that she had been very sorry."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: The policeman asked the beggar, \"Where do you live?\[span_41](start_span)"[span_41](end_span)",
+        options: [
+            "The policeman inquired the beggar where he lived.",
+            "The policeman inquired the beggar where did he live.",
+            "The policeman inquired the beggar where he lives.",
+            "The policeman inquired the beggar where does he live."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: The teacher said, \"The Sun rises in the east.\[span_42](start_span)"[span_42](end_span)",
+        options: [
+            "The teacher said that the Sun rose in the east.",
+            "The teacher said that the Sun rises in the east.",
+            "The teacher said that the Sun has risen in the east.",
+            "The teacher said that the Sun had risen in the east."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: I said, \"I want to talk to my sister.\[span_43](start_span)"[span_43](end_span)",
+        options: [
+            "I said that I want to talk to my sister.",
+            "I said that I wanted to talk to my sister.",
+            "I said that he wanted to talk to his sister.",
+            "I said that she wanted to talk to her sister."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: He said to me, \"You won a prize.\[span_44](start_span)"[span_44](end_span)",
+        options: [
+            "He told me that I won a prize.",
+            "He told me that he had won a prize.",
+            "He told me that I had won a prize.",
+            "He told me that you had won a prize."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: She said, \"He works in a factory.\[span_45](start_span)"[span_45](end_span)",
+        options: [
+            "She said that he worked in a factory.",
+            "She said that he works in a factory.",
+            "She said that he had worked in a factory.",
+            "She said that he was working in a factory."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: He said, \"Asha washes the clothes.\[span_46](start_span)"[span_46](end_span)",
+        options: [
+            "He said that Asha washes the clothes.",
+            "He said that Asha washed the clothes.",
+            "He said that Asha has washed the clothes.",
+            "He said that Asha had washed the clothes."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: He said to me, \"My sister is reading a novel.\[span_47](start_span)"[span_47](end_span)",
+        options: [
+            "He told me that his sister is reading a novel.",
+            "He told me that his sister was reading a novel.",
+            "He told me that my sister was reading a novel.",
+            "He told me that his sister had been reading a novel."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: She said to me, \"I have washed my clothes.\[span_48](start_span)"[span_48](end_span)",
+        options: [
+            "She told me that she has washed her clothes.",
+            "She told me that I had washed my clothes.",
+            "She told me that she had washed her clothes.",
+            "She told me that she washed her clothes."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: I said to him, \"Sita has been reading a novel since 2 p.m.\[span_49](start_span)"[span_49](end_span)",
+        options: [
+            "I told him that Sita has been reading a novel since 2 p.m.",
+            "I told him that Sita had been reading a novel since 2 p.m.",
+            "I told him that Sita was reading a novel since 2 p.m.",
+            "I told him that Sita read a novel since 2 p.m."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: He said to me, \"I did not go to Delhi.\[span_50](start_span)"[span_50](end_span)",
+        options: [
+            "He told me that he did not go to Delhi.",
+            "He told me that he has not gone to Delhi.",
+            "He told me that he had not gone to Delhi.",
+            "He told me that I had not gone to Delhi."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: I said to him, \"She was singing a song.\[span_51](start_span)"[span_51](end_span)",
+        options: [
+            "I told him that she had been singing a song.",
+            "I told him that she was singing a song.",
+            "I told him that she has been singing a song.",
+            "I told him that she had sung a song."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: Mohan said to me, \"I will do my homework.\[span_52](start_span)"[span_52](end_span)",
+        options: [
+            "Mohan told me that he will do his homework.",
+            "Mohan told me that he would do his homework.",
+            "Mohan told me that I would do my homework.",
+            "Mohan told me that he would do my homework."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: He said to me, \"She will be singing a song.\[span_53](start_span)"[span_53](end_span)",
+        options: [
+            "He told me that she will be singing a song.",
+            "He told me that she would be singing a song.",
+            "He told me that she had been singing a song.",
+            "He told me that she would sing a song."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: I said to her, \"I shall have written letters.\[span_54](start_span)"[span_54](end_span)",
+        options: [
+            "I told her that I shall have written letters.",
+            "I told her that she would have written letters.",
+            "I told her that I would have written letters.",
+            "I told her that I should write letters."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: He said to me, \"I shall have been digging the ground for half an hour.\[span_55](start_span)"[span_55](end_span)",
+        options: [
+            "He told me that he would have been digging the ground for half an hour.",
+            "He told me that he should have been digging the ground for half an hour.",
+            "He told me that I would have been digging the ground for half an hour.",
+            "He told me that he had been digging the ground for half an hour."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: We said, \"We disagree with it.\[span_56](start_span)"[span_56](end_span)",
+        options: [
+            "We said that they disagreed with it.",
+            "We said that we disagreed with it.",
+            "We said that we disagree with it.",
+            "We said that they disagree with it."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: I said to her, \"Will you have ironed your clothes?\[span_57](start_span)"[span_57](end_span)",
+        options: [
+            "I asked her if she will have ironed her clothes.",
+            "I asked her if she would have ironed her clothes.",
+            "I asked her if you would have ironed your clothes.",
+            "I asked her that if she would have ironed her clothes."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: He said to us, \"Has she been spinning since yesterday?\[span_58](start_span)"[span_58](end_span)",
+        options: [
+            "He asked us if she had been spinning since yesterday.",
+            "He asked us if she has been spinning since the previous day.",
+            "He asked us if she had been spinning since the previous day.",
+            "He asked us that if she had been spinning since yesterday."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: She said, \"Do you like coffee?\[span_59](start_span)"[span_59](end_span)",
+        options: [
+            "She asked if I like coffee.",
+            "She asked if I liked coffee.",
+            "She asked that if I liked coffee.",
+            "She asked if you liked coffee."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: You said to him, \"Why are you making mischief?\[span_60](start_span)"[span_60](end_span)",
+        options: [
+            "You asked him why he is making mischief.",
+            "You asked him why he was making mischief.",
+            "You asked him why was he making mischief.",
+            "You asked him why you were making mischief."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: She said to us, \"When will you see me again?\[span_61](start_span)"[span_61](end_span)",
+        options: [
+            "She asked us when we would see her again.",
+            "She asked us when would we see her again.",
+            "She asked us when we will see her again.",
+            "She asked us when they would see her again."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: The teacher said to the boys, \"Take out your books and read them silently.\[span_62](start_span)"[span_62](end_span)",
+        options: [
+            "The teacher asked the boys that they take out their books and read them silently.",
+            "The teacher ordered the boys to take out their books and read them silently.",
+            "The teacher ordered the boys that they should take out their books and read them silently.",
+            "The teacher advised the boys taking out their books and reading them silently."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: Mother said to Karuna, \"Go to the kitchen and prepare a cup of tea for me.\[span_63](start_span)"[span_63](end_span)",
+        options: [
+            "Mother ordered Karuna to go to the kitchen and prepare a cup of tea for her.",
+            "Mother requested Karuna to go to the kitchen and prepare a cup of tea for me.",
+            "Mother ordered Karuna that she go to the kitchen and prepare a cup of tea for her.",
+            "Mother advised Karuna going to the kitchen and preparing a cup of tea for her."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: My servant said to me, \"Sir, please give me permission to go out.\[span_64](start_span)"[span_64](end_span)",
+        options: [
+            "My servant ordered me to give him permission to go out.",
+            "My servant asked me that I should give him permission to go out.",
+            "My servant requested me to allow him to go out.",
+            "My servant advised me to give him permission to go out."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: She said, \"Let's stop now and finish it afterwards.\[span_65](start_span)"[span_65](end_span)",
+        options: [
+            "She suggested that we should stop then and finish it afterwards.",
+            "She ordered that we should stop now and finish it afterwards.",
+            "She requested to stop then and finish it afterwards.",
+            "She proposed that they stop now and finish it afterwards."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: He said, \"Let's not do anything about it till we know the facts.\[span_66](start_span)"[span_66](end_span)",
+        options: [
+            "He suggested that we shouldn't do anything till we knew the facts.",
+            "He suggested that they shouldn't do anything till they knew the facts.",
+            "He ordered not to do anything till they knew the facts.",
+            "He requested that they should not do anything till they know the facts."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: The Principal said to the peon, \"Let the students come in.\[span_67](start_span)"[span_67](end_span)",
+        options: [
+            "The Principal requested the peon to let the students come in.",
+            "The Principal ordered the peon to allow the students come in.",
+            "The Principal advised the peon that the students should come in.",
+            "The Principal ordered the peon that the students might come in."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: Pinki said, \"Hurrah! I have passed.\[span_68](start_span)"[span_68](end_span)",
+        options: [
+            "Pinki exclaimed with joy that she had passed.",
+            "Pinki exclaimed with sorrow that she had passed.",
+            "Pinki told with joy that she has passed.",
+            "Pinki exclaimed with joy that she has passed."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: She said, \"Alas! I have lost my gold ring.\[span_69](start_span)"[span_69](end_span)",
+        options: [
+            "She exclaimed with wonder that she had lost her gold ring.",
+            "She exclaimed sorrowfully that she had lost her gold ring.",
+            "She exclaimed with sorrow that she has lost her gold ring.",
+            "She exclaimed that alas she had lost her gold ring."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: Harry said, \"How clever I am!\[span_70](start_span)"[span_70](end_span)",
+        options: [
+            "Harry exclaimed with wonder that he was very clever.",
+            "Harry exclaimed with wonder that I am very clever.",
+            "Harry exclaimed that he is very clever.",
+            "Harry asked how clever he was."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: The grocer said to the buyer, \"Do you want to purchase this item?\[span_71](start_span)"[span_71](end_span)",
+        options: [
+            "The grocer asked the buyer if he wanted to purchase that item.",
+            "The grocer asked the buyer that if he wanted to purchase that item.",
+            "The grocer asked the buyer if he wants to purchase this item.",
+            "The grocer asked the buyer whether he want to purchase that item."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: The milkman said, \"You will give me payment today.\[span_72](start_span)"[span_72](end_span)",
+        options: [
+            "The milkman said that I will give him payment today.",
+            "The milkman said that I would give him payment that day.",
+            "The milkman said that you would give me payment that day.",
+            "The milkman said that I would give him payment today."
+        ],
+        ans: 1
+    },
+    {
+        q: "Change to Indirect: She says, \"My father works in the Air force.\[span_73](start_span)"[span_73](end_span)",
+        options: [
+            "She says that her father works in the Air force.",
+            "She says that his father works in the Air force.",
+            "She says that her father worked in the Air force.",
+            "She says that my father works in the Air force."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: Shyam said, \"I will come tomorrow evening to take my bicycle.\[span_74](start_span)"[span_74](end_span)",
+        options: [
+            "Shyam said that he will come tomorrow evening to take his bicycle.",
+            "Shyam said that he would come tomorrow evening to take his bicycle.",
+            "Shyam said that he would come the next evening to take his bicycle.",
+            "Shyam said that he would come tomorrow evening to take my bicycle."
+        ],
+        ans: 2
+    },
+    {
+        q: "Change to Indirect: Riya said, \"I played this game last month.\[span_75](start_span)"[span_75](end_span)",
+        options: [
+            "Riya said that she has played that game last month.",
+            "Riya said that she have played that game the previous month.",
+            "Riya said that she has played that game the previous month.",
+            "Riya said that she had played that game the previous month."
+        ],
+        ans: 3
+    },
+    {
+        q: "Change to Indirect: I said, \"I don't trust you.\[span_76](start_span)"[span_76](end_span)",
+        options: [
+            "I said that I didn't trust you.",
+            "I said that I don't trust you.",
+            "I said to you that I didn't trust.",
+            "None of the above."
+        ],
+        ans: 0
+    },
+    {
+        q: "Change to Indirect: Vishal said to Dev, \"Let's go for playing video games.\[span_77](start_span)"[span_77](end_span)",
+        options: [
+            "Vishal asked Dev that they should go for playing video games.",
+            "Vishal told Dev that they will go for playing video games.",
+            "Vishal told Dev that they should go for playing video games.",
+            "Vishal asked Dev that they need to go for playing video games."
+        ],
+        ans: 2 // Wait, the key says 3 -> index 2.
+    },
+    {
+        q: "Change to Indirect: Devika said to Ritu, \"Can you speak a little louder?\[span_78](start_span)"[span_78](end_span)",
+        options: [
+            "Devika asked Ritu that if she could speak a little louder.",
+            "Devika asked Ritu if could she speak a little louder.",
+            "Devika asked Ritu to speak a little louder.",
+            "Devika asked Ritu if she could speak a little louder."
+        ],
+        ans: 3 // Key says 4 -> index 3.
+    },
+    {
+        q: "Change to Indirect: Nitin said to her, \"What a cold day!\[span_79](start_span)"[span_79](end_span)",
+        options: [
+            "Nitin told her that it was a cold day.",
+            "Nitin exclaimed that it was a cold day.",
+            "Nitin exclaimed sorrowfully if it was a cold day.",
+            "Nitin exclaimed that it was a very cold day."
+        ],
+        ans: 3 // Key says 4 -> index 3.
+    }
+];
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-questions');
+    let html = '';
+    
+    quizData.forEach((item, index) => {
+        html += `<div class="question-block">
+            <div class="question-text">${index + 1}. ${item.q}</div>
+            <div class="options">`;
+        
+        item.options.forEach((opt, optIndex) => {
+            html += `<label>
+                <input type="radio" name="q${index}" value="${optIndex}">
+                ${opt}
+            </label>`;
+        });
+        
+        html += `</div></div>`;
+    });
+    
+    container.innerHTML = html;
+}
+
+function calculateScore() {
+    let score = 0;
+    let total = quizData.length;
+    
+    quizData.forEach((item, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected && parseInt(selected.value) === item.ans) {
+            score++;
+        }
+    });
+    
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `You scored ${score} out of ${total}!`;
+    
+    // Optional: Scroll to result
+    resultDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+window.onload = renderQuiz;
+</script>
+
+</body>
+</html>
